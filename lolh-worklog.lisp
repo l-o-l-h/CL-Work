@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-01-16 04:03:10 minilolh3>
+;;; Time-stamp: <2023-01-16 15:29:53 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -9,25 +9,6 @@
 ;; Code (procedures and variables) acting on worklog files.
 
 ;;; Code:
-
-(defpackage :lolh.worklog
-  (:use :cl
-	:lolh.utils)
-  (:export :parse-worklog-file
-	   :parse-worklog-entry
-	   :parse-worklog-entries
-	   :parse-worklog-caseno-entries
-	   :worklog-entry
-	   :worklog-caseno-entry
-	   :worklog-entry-lt
-	   :worklog-entry-gt
-	   :worklog-entry-eq
-	   :work-d
-	   :worklog-d
-	   :*worklog-f*
-	   :*worklog-entries*
-	   :simple-print
-	   :test-lolh-worklog))
 
 (in-package :lolh.worklog)
 

@@ -4,6 +4,7 @@
   :author "LOLH-LINC <lincolnlaw@mac.com>"
   :license "CC0 1.0 Universal"
   :depends-on ("lolh-utils")
-  :components ((:file "lolh-worklog")
+  :components ((:file "lolh-worklog-package")
+	       (:file "lolh-worklog" :depends-on ("lolh-worklog-package"))
 	       (:file "test-lolh-worklog"
 		      :depends-on ("lolh-worklog"))))
