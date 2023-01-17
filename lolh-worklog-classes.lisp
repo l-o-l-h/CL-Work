@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-01-16 20:09:49 minilolh3>
+;;; Time-stamp: <2023-01-16 20:45:16 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -11,6 +11,12 @@
 ;;; Code:
 
 (in-package :lolh.worklog)
+
+(defparameter +entry-separator+ "")
+(defparameter +subj-verb-separator+ " --- ")
+(defparameter +desc-separator+
+  " ------------------------------------------------------------------------------")
+(defparameter +simple-print-format+ "~A--~A | ~A | ~A | ~A --- ~A~&~A~2&")
 
 (defclass worklog-entry ()
   ((begin-datetime :accessor entry-begin-datetime
@@ -117,5 +123,8 @@
   (not (or (worklog-entry-lt entry1 entry2)
 	   (worklog-entry-gt entry1 entry2))))
 
+(cl-bst-set-cmp-funcs :lt #'worklog-entry-lt
+		      :gt #'worklog-entry-gt
+		      :eq #'worklog-entry-eq)
 
 ;;; End lolh-worklog-classes.lisp
