@@ -8,6 +8,4 @@
 	       (:file "lolh-worklog-definitions"
 		:depends-on ("lolh-worklog-package"))
 	       (:file "lolh-worklog"
-		:depends-on ("lolh-worklog-definitions"))
-	       (:file "test-lolh-worklog"
-		:depends-on ("lolh-worklog"))))
+		:depends-on ("lolh-worklog-definitions"))))
