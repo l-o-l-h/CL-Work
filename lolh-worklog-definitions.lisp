@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-01-16 20:55:01 minilolh3>
+;;; Time-stamp: <2023-01-17 01:02:40 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -138,4 +138,7 @@
 		      :gt #'worklog-entry-gt
 		      :eq #'worklog-entry-eq)
 
+(defclass worklog-time-entry (worklog-entry)
+  ((elapsed-time :accessor elapsed-time))
+  (:documentation "A worklog-entry class that handles elapsed time."))
 ;;; End lolh-worklog-classes.lisp
