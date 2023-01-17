@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-01-16 20:45:16 minilolh3>
+;;; Time-stamp: <2023-01-16 20:55:01 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -17,6 +17,17 @@
 (defparameter +desc-separator+
   " ------------------------------------------------------------------------------")
 (defparameter +simple-print-format+ "~A--~A | ~A | ~A | ~A --- ~A~&~A~2&")
+
+(defparameter *work-d*
+  (make-pathname :directory '(:absolute "usr" "local" "work")))
+(defparameter *worklog-d*
+  (merge-pathnames
+   (make-pathname :directory '(:relative "worklog")) *work-d*))
+(defparameter *worklog-f*
+  (merge-pathnames
+   (make-pathname :name "worklog.2007.otl") *worklog-d*))
+
+(defparameter *worklog-entries* nil)
 
 (defclass worklog-entry ()
   ((begin-datetime :accessor entry-begin-datetime

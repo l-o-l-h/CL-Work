@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-01-16 20:45:04 minilolh3>
+;;; Time-stamp: <2023-01-16 20:54:51 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -11,17 +11,6 @@
 ;;; Code:
 
 (in-package :lolh.worklog)
-
-(defparameter *work-d*
-  (make-pathname :directory '(:absolute "usr" "local" "work")))
-(defparameter *worklog-d*
-  (merge-pathnames
-   (make-pathname :directory '(:relative "worklog")) *work-d*))
-(defparameter *worklog-f*
-  (merge-pathnames
-   (make-pathname :name "worklog.2007.otl") *worklog-d*))
-
-(defparameter *worklog-entries* nil)
 
 ;; (lolh.worklog:parse-worklog-file lolh.worklog:*worklog-f*)
 ;; (lolh.worklog:parse-worklog-file
