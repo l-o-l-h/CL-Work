@@ -5,9 +5,9 @@
   :license "CC0 1.0 Universal"
   :depends-on ("lolh-utils")
   :components ((:file "lolh-worklog-package")
-	       (:file "lolh-worklog-classes"
+	       (:file "lolh-worklog-definitions"
 		:depends-on ("lolh-worklog-package"))
 	       (:file "lolh-worklog"
-		:depends-on ("lolh-worklog-classes"))
+		:depends-on ("lolh-worklog-definitions"))
 	       (:file "test-lolh-worklog"
 		:depends-on ("lolh-worklog"))))
