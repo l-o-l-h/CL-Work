@@ -1,9 +1,9 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-01-16 20:54:51 minilolh3>
+;;; Time-stamp: <2023-01-19 07:04:46 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
-;;; Version 0.0.7
+;;; Version 0.0.8
 
 ;;; Commentary:
 ;; Code (procedures and variables) acting on worklog files.
@@ -18,24 +18,27 @@
 ;;  :parse-func #'lolh.worklog:parse-worklog-caseno-entries)
 
 (defun parse-worklog-file
-    (file &key (parse-func #'parse-worklog-entries))
+    (file &key
+	    (parse-func #'parse-worklog-entries)
+	    (use-class 'worklog-entry))
   "Given a file, parse the contents into a data structure using a
-provided parsing function.  Each worklog entry should be stored in an
+provided parsing function.  Each worklog entry will be stored in an
 instance of the 'worklog-entry' class.  The collection of worklog
 entries will be stored in the global variable '*worklog-entries*'.
 
 Because there might be different potential parsing functions, use the
 :parse-func keyword to supply the desired parser.  The default parser
-is 'parse-worklog-entries', which returns a list of worklog-entry
-instances.
+is 'parse-worklog-entries', which returns an unordered list of
+worklog-entry instances.
 
-An alternate parsing function is 'parse-worklog-caseno-entries',
-which places the entries into a BST sorted first by case no."
+An alternate parsing function is 'parse-worklog-entries-by-class',
+which places the entries into a BST sorted by class type:
+'worklog-caseno-entry', or 'worklog-datetime-entry'."
   (with-open-file (s file :if-does-not-exist :error)
-    (setf *worklog-entries* (funcall parse-func s))
+    (setf *worklog-entries* (funcall parse-func s :use-class use-class))
     t))
 
-(defun parse-worklog-entries (s)
+(defun parse-worklog-entries (s &optional &key use-class)
   "Parse and collect all worklog entries from a file opened as a stream.
 Return the collection as an unordered list."
   (loop for entry = (parse-worklog-entry s)
@@ -44,6 +47,33 @@ Return the collection as an unordered list."
 	collect entry
 	;; remove this format for working code.
 	do (format t ".")))
+
+(defun parse-worklog-entries-by-class (s &key (use-class 'worklog-caseno-entry))
+  "Parse and collect all worklog entries in a BST from a file with the
+ability to choose the class to sort by.  The default class is the
+class 'worklog-caseno-entry.
+
+Order of sorting for the default is:
+1. caseno
+2. begin datetime
+3. end datetime
+4. subject
+5. verb
+6. type
+7. description.
+
+The BST is rooted in the lolh.utils:*cl-bst* global parameter.  Equals
+are placed into lolh.utils:*cl-bst-eqs* global parameter."
+  (setf *cl-bst* (make-bst-node))
+  (loop for entry = (parse-worklog-entry
+		     s
+		     :use-class use-class)
+	while entry
+	do
+	   (bst-insert!-node entry *cl-bst*)
+	   (format t ".")
+	finally
+	   (return *cl-bst*)))
 
 (defun parse-worklog-caseno-entries (s)
   "Parse and collect all worklog caseno entries from a file opened as
@@ -74,8 +104,21 @@ Equals are placed into lolh.utils:*cl-bst-eqs* parameter."
 	finally
 	   (return *cl-bst*)))
 
+(defun parse-worklog-datetime-entries (s)
+  "Parse and collect all worklog entries ordered by datetime in a BST
+collection."
+  (setf *cl-bst* (make-bst-node))
+  (loop for entry = (parse-worklog-entry
+		     s
+		     :of-class-type 'worklog-datetime-entry)
+	while entry
+	do
+	   (bst-insert!-node entry *cl-bst*)
+	   (format t ".")
+	finally
+	   (return *cl-bst*)))
 
-(defun parse-worklog-entry (s &key (of-class-type 'worklog-entry))
+(defun parse-worklog-entry (s &key (use-class 'worklog-entry))
   "Procedure to parse a single worklog entry from a stream and return
 it as an instance of a class given using keyword ':of-class-type',
 for instance, 'worklog-entry (the default) or 'worklog-caseno-entry."
@@ -84,7 +127,7 @@ for instance, 'worklog-entry (the default) or 'worklog-caseno-entry."
 	;; default class type is 'worklog-entry
 	;; another possibility is 'worklog-caseno-entry
 	;; more to follow...
-	with entry = (make-instance of-class-type)
+	with entry = (make-instance use-class)
 	when (string= line +entry-separator+)
 	  do
 	     (return entry)
@@ -115,7 +158,7 @@ for instance, 'worklog-entry (the default) or 'worklog-caseno-entry."
 	   (return (string-trim '(#\SPACE #\TAB) full-desc))))
 
 (defun simple-print (entries &key (to t))
-  "Print worklog entries as simply as possible to a stream :to (default is standard out)."
+  "Print worklog entries as simply as possible to a stream :to (default is standard-out)."
   (dolist (entry entries)
     (funcall #'worklog-entry-simple-print entry :to to)))
 
@@ -127,5 +170,20 @@ Look for the file ending with '.out.txt'."
 		     :direction :output
 		     :if-does-not-exist :create)
     (simple-print entries :to s)))
+
+(defun simple-print-bst (bst &key (to t))
+  "Print worklog entries held in a BST data structure simply."
+  (when bst
+    (simple-print-bst (bst-node-left bst))
+    (funcall #'worklog-entry-simple-print (bst-node-data bst) :to to
+	     )
+    (simple-print-bst (bst-node-right bst))))
+
+(defun simple-print-bst-to-file (bst)
+  (with-open-file (s (concatenate 'string (enough-namestring *worklog-f*) ".out.txt")
+		     :direction :output
+		     :if-does-not-exist :create
+		     :if-exists :overwrite)
+    (simple-print-bst bst :to s)))
 
 ;;; End worklog-parse.lisp

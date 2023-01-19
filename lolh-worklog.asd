@@ -1,6 +1,6 @@
 (defsystem "lolh-worklog"
   :description "Procedures operating upon worklogs."
-  :version "0.0.1"
+  :version "0.0.8"
   :author "LOLH-LINC <lincolnlaw@mac.com>"
   :license "CC0 1.0 Universal"
   :depends-on ("lolh-utils" "local-time" "time-interval")
