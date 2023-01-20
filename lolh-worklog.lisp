@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-01-19 07:04:46 minilolh3>
+;;; Time-stamp: <2023-01-20 08:23:09 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -38,7 +38,7 @@ which places the entries into a BST sorted by class type:
     (setf *worklog-entries* (funcall parse-func s :use-class use-class))
     t))
 
-(defun parse-worklog-entries (s &optional &key use-class)
+(defun parse-worklog-entries (s &key use-class)
   "Parse and collect all worklog entries from a file opened as a stream.
 Return the collection as an unordered list."
   (loop for entry = (parse-worklog-entry s)

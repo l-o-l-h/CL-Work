@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-01-19 05:44:48 minilolh3>
+;;; Time-stamp: <2023-01-20 06:48:37 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -61,7 +61,8 @@
 (defclass worklog-datetime-entry (worklog-entry)
   ((elapsed :accessor elapsed
 	    :initarg :elapsed))
-  (:documentation "An entry specialized to work with datetimes's."))
+  (:documentation "An entry specialized to work with datetimes as the 
+initial sort."))
 
 (defmethod worklog-entry-simple-print ((entry worklog-datetime-entry) &key (to t))
   "A basic format function to print a datetime entry simply."

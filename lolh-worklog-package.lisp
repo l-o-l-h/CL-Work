@@ -1,5 +1,5 @@
 ;;; lolh-worklog-package.lisp - Package definition for lolh-worklog
-;;; Time-stamp: <2023-01-19 06:50:22 minilolh3>
+;;; Time-stamp: <2023-01-20 08:36:21 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-16
@@ -12,9 +12,7 @@
 
 (defpackage :lolh.worklog
   (:use :cl
-	:lolh.utils
-	:local-time
-	:time-interval)
+	:lolh.utils)
   (:export
    :parse-worklog-file
    :parse-worklog-entry
