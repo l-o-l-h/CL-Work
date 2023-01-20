@@ -1,14 +1,13 @@
 ;;; test-lolh-worklog.lisp - Simple test to check the configuration.
-;;; Time-stamp: <2023-01-20 08:43:26 minilolh3>
+;;; Time-stamp: <2023-01-20 09:00:38 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Version 0.0.8
 ;;; Created: 2023-01-09
 
 ;;; Commentary:
-;; From CL, (load "test-lolh-worklog")
-;; and then execute (lolh.worklog:test-lolh-worklog)
-;; to check that the system is configured properly.
+;; A few little functions to test that the system lolh-worklog
+;; is working.
 
 ;;; Code:
 (require :lolh-worklog)
@@ -25,7 +24,7 @@
 		      :use-class 'worklog-caseno-entry)
   (simple-print-bst-to-file *worklog-entries*))
 
-(print "After (load '(test-lolh-worklog)'
+(print "After (load \"test-lolh-worklog\")
 
 execute:
 - '(lolh.worklog:test-lolh-worklog)'
