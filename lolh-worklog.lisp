@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-01-20 08:23:09 minilolh3>
+;;; Time-stamp: <2023-01-21 08:05:55 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -93,7 +93,7 @@ Equals are placed into lolh.utils:*cl-bst-eqs* parameter."
   (setf *cl-bst* (make-bst-node))
   (loop for entry = (parse-worklog-entry
 		     s
-		     :of-class-type 'worklog-caseno-entry)
+		     :use-class 'worklog-caseno-entry)
 	while entry			;entries are done when nil
 	do
 	   ;; (describe entry)
@@ -110,7 +110,7 @@ collection."
   (setf *cl-bst* (make-bst-node))
   (loop for entry = (parse-worklog-entry
 		     s
-		     :of-class-type 'worklog-datetime-entry)
+		     :use-class 'worklog-datetime-entry)
 	while entry
 	do
 	   (bst-insert!-node entry *cl-bst*)
@@ -184,6 +184,7 @@ Look for the file ending with '.out.txt'."
 		     :direction :output
 		     :if-does-not-exist :create
 		     :if-exists :overwrite)
+    (format s "File created: => ~A~2&" (local-time:universal-to-timestamp (get-universal-time)))
     (simple-print-bst bst :to s)))
 
 ;;; End worklog-parse.lisp

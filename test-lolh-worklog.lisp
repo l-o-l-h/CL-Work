@@ -1,5 +1,5 @@
 ;;; test-lolh-worklog.lisp - Simple test to check the configuration.
-;;; Time-stamp: <2023-01-20 09:00:38 minilolh3>
+;;; Time-stamp: <2023-01-21 07:54:23 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Version 0.0.8
@@ -28,7 +28,7 @@
 
 execute:
 - '(lolh.worklog:test-lolh-worklog)'
-- '(lolh.worklog:test-lolh-wroklog-bst)'
+- '(lolh.worklog:test-lolh-worklog-bst)'
 to check that the system is configured properly.")
 
 ;;; End test-lolh-worklog.lisp
