@@ -1,5 +1,5 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-01-21 19:01:32 wlh>
+;;; Time-stamp: <2023-01-22 07:06:45 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -27,7 +27,7 @@
   "~A--~A (~A) | ~A | ~A | ~A --- ~A~&~A~2&")
 
 (defparameter +simple-print-caseno-format+
-  "~A | ~A~&~A--~A~&~A --- ~A~2&~A~2&")
+  "~A | ~A~&~A--~A~&~A --- ~A~2&~A~&----------~2&")
 
 (defparameter *work-d*
   (make-pathname :directory '(:absolute "usr" "local" "work")))
