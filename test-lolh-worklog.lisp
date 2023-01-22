@@ -1,8 +1,8 @@
 ;;; test-lolh-worklog.lisp - Simple test to check the configuration.
-;;; Time-stamp: <2023-01-21 16:55:57 wlh>
+;;; Time-stamp: <2023-01-21 19:03:23 wlh>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
-;;; Version 0.0.8
+;;; Version 0.0.9
 ;;; Created: 2023-01-09
 
 ;;; Commentary:
