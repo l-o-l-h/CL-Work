@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-01-21 16:42:42 wlh>
+;;; Time-stamp: <2023-01-21 18:40:09 wlh>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -18,6 +18,7 @@
   " ------------------------------------------------------------------------------")
 (defparameter +simple-print-format+ "~A--~A | ~A | ~A | ~A --- ~A~&~A~2&")
 (defparameter +simple-print-datetime-format+ "~A--~A (~A) | ~A | ~A | ~A --- ~A~&~A~2&")
+(defparameter +simple-print-caseno-format+ "~A | ~A~&~A--~A~&~A --- ~A~2&~A~2&")
 
 (defparameter *work-d*
   (make-pathname :directory '(:absolute "usr" "local" "work")))
@@ -265,6 +266,8 @@ initial sort."))
   "Less-than method for a caseno worklog entry class."
   (let ((caseno1 (entry-caseno entry1))
 	(caseno2 (entry-caseno entry2))
+	(type1 (entry-type entry1))
+	(type2 (entry-type entry2))
 	(begin-dt1 (entry-begin-datetime entry1))
 	(begin-dt2 (entry-begin-datetime entry2))
 	(end-dt1 (entry-end-datetime entry1))
@@ -273,13 +276,13 @@ initial sort."))
 	(subject2 (entry-subject entry2))
 	(verb1 (entry-verb entry1))
 	(verb2 (entry-verb entry2))
-	(type1 (entry-type entry1))
-	(type2 (entry-type entry2))
 	(desc1 (entry-description entry1))
 	(desc2 (entry-description entry2)))
     (cond
       ((string< caseno1 caseno2) t)
       ((string> caseno1 caseno2) nil)
+      ((string< type1 type2) t)
+      ((string> type1 type2) nil)
       ((string< begin-dt1 begin-dt2) t)
       ((string> begin-dt1 begin-dt2) nil)
       ((string< end-dt1 end-dt2) t)
@@ -288,11 +291,20 @@ initial sort."))
       ((string> subject1 subject2) nil)
       ((string< verb1 verb2) t)
       ((string> verb1 verb2) nil)
-      ((string< type1 type2) t)
-      ((string> type1 type2) nil)
       ((string< desc1 desc2) t)
       ((string> desc1 desc2) nil)
       (t nil))))
+
+(defmethod worklog-entry-simple-print ((entry worklog-caseno-entry) &key (to t))
+  "A basic format function to print an entry simply."
+  (format to +simple-print-caseno-format+
+	  (entry-caseno entry)
+	  (entry-type entry)
+	  (entry-begin-datetime entry)
+	  (entry-end-datetime entry)
+	  (entry-subject entry)
+	  (entry-verb entry)
+	  (entry-description entry)))
 
 (defmethod worklog-entry-gt ((entry1 worklog-caseno-entry)
 			     (entry2 worklog-caseno-entry))
