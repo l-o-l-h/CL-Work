@@ -1,5 +1,5 @@
 ;;; test-lolh-worklog.lisp - Simple test to check the configuration.
-;;; Time-stamp: <2023-01-21 07:54:23 minilolh3>
+;;; Time-stamp: <2023-01-21 16:55:57 wlh>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Version 0.0.8
@@ -15,13 +15,12 @@
 (in-package :lolh.worklog)
 
 (defun test-lolh-worklog ()
-  (parse-worklog-file *worklog-f*)
-  (simple-print *worklog-entries*))
+  (parse-worklog-file :file *worklog-f*
+		      :class 'worklog-entry))
 
 (defun test-lolh-worklog-bst ()
-  (parse-worklog-file *worklog-f*
-		      :parse-func #'parse-worklog-entries-by-class
-		      :use-class 'worklog-caseno-entry)
+  (parse-worklog-file :file *worklog-f*
+		      :class 'worklog-caseno-entry)
   (simple-print-bst-to-file *worklog-entries*))
 
 (print "After (load \"test-lolh-worklog\")
