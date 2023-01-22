@@ -1,5 +1,5 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-01-22 07:06:45 minilolh3>
+;;; Time-stamp: <2023-01-22 08:36:29 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -28,6 +28,11 @@
 
 (defparameter +simple-print-caseno-format+
   "~A | ~A~&~A--~A~&~A --- ~A~2&~A~&----------~2&")
+
+(defparameter +local-time-format+
+  "'(:year \"-\" (:month 2) \"-\" (:day 2) \"T\" (:hour 2) \":\" (:min 2) \":\" (:sec 2))"
+  "This format parses a local-time timestamp object into the datetime format used
+by worklog files.")
 
 (defparameter *work-d*
   (make-pathname :directory '(:absolute "usr" "local" "work")))

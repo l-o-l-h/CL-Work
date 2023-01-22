@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-01-21 19:01:22 wlh>
+;;; Time-stamp: <2023-01-22 07:09:47 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -19,6 +19,7 @@
 
 
 
+;; CLASS=> WORKLOG-ENTRY
 (defclass worklog-entry ()
   ((begin-datetime :accessor entry-begin-datetime
 		   :initarg :begin-datetime)
@@ -145,6 +146,7 @@
 
 
 
+;; CLASS=> WORKLOG-DATETIME-ENTRY
 (defclass worklog-datetime-entry (worklog-entry)
   ((elapsed :accessor elapsed
 	    :initarg :elapsed))
@@ -241,6 +243,7 @@ initial sort."))
 
 
 
+;; CLASS=> WORKLOG-CASENO-ENTRY
 (defclass worklog-caseno-entry (worklog-entry) ()
   (:documentation "An entry specialized to work with caseno's."))
 
@@ -336,6 +339,7 @@ initial sort."))
 
 
 
+;; CLASS=> WORKLOG-TIME-ENTRY
 (defclass worklog-time-entry (worklog-entry)
   ((elapsed-time :accessor elapsed-time))
   (:documentation "A worklog-entry class that handles elapsed time."))
