@@ -3,7 +3,7 @@
   :version "0.0.9"
   :author "LOLH-LINC <lincolnlaw@mac.com>"
   :license "CC0 1.0 Universal"
-  :depends-on ("lolh-utils" "local-time" "time-interval" "local-time-duration")
+  :depends-on ("lolh-utils" "local-time" "local-time-duration")
   :components ((:file "lolh-worklog-package")
 	       (:file "lolh-worklog-definitions"
 		:depends-on ("lolh-worklog-package"))

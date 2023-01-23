@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-01-22 07:09:47 minilolh3>
+;;; Time-stamp: <2023-01-23 09:07:28 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -341,7 +341,26 @@ initial sort."))
 
 ;; CLASS=> WORKLOG-TIME-ENTRY
 (defclass worklog-time-entry (worklog-entry)
-  ((elapsed-time :accessor elapsed-time))
+  ((begin-ts :accessor begin-ts
+	     :initarg :begin-ts)
+   (end-ts   :accessor end-ts
+	     :initarg :end-ts)
+   (elapsed-time :accessor elapsed-time))
   (:documentation "A worklog-entry class that handles elapsed time."))
+
+(defmethod dst-p ((wl-entry worklog-entry))
+  "Predicate returning t if the time entries in worklog-entry are in
+daylight savings time (DST)"
+  (let* ((dt (entry-begin-datetime wl-entry))
+	 (ts (parse-timestring dt :end 10 :offset -28800)))
+    (ninth (multiple-value-list (decode-timestamp ts)))))
+
+(defmethod tz-offset ((wl-entry worklog-entry))
+  (let* ((dt (entry-begin-datetime wl-entry))
+	 (ts (parse-timestring dt :end 10 :offset -28800)))
+    (tenth (multiple-value-list (decode-timestamp ts)))))
+
+(defmethod ts-diff ((wl-entry worklog-time-entry))
+  (local-time-duration:timestamp-difference (end-ts wl-entry) (begin-ts wl-entry)))
 
 ;;; End lolh-worklog-classes.lisp
