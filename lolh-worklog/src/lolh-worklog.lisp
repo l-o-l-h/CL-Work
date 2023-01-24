@@ -1,9 +1,9 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-01-21 19:02:02 wlh>
+;;; Time-stamp: <2023-01-24 13:26:35 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
-;;; Version 0.0.9
+;;; Version 0.0.10
 
 ;;; Commentary:
 ;; Procedures to parse a worklog file into a BST data structure, and
