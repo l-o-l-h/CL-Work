@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-01-23 09:07:28 minilolh3>
+;;; Time-stamp: <2023-01-23 17:52:37 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -348,6 +348,13 @@ initial sort."))
    (elapsed-time :accessor elapsed-time))
   (:documentation "A worklog-entry class that handles elapsed time."))
 
+(defmethod initialize-instance :after ((wl-t-entry worklog-time-entry) &key)
+  "A method to calculate the ts-diff value for a new instance of a
+worklog-time-entry instance upon initialization."
+  (setf (begin-ts wl-t-entry) (parse-timestring (entry-begin-datetime wl-t-entry) :offset (tz-offset wl-t-entry)))
+  (setf (end-ts wl-t-entry) (parse-timestring (entry-end-datetime wl-t-entry) :offset (tz-offset wl-t-entry)))
+  (setf (elapsed-time wl-t-entry) (ts-diff wl-t-entry)))
+
 (defmethod dst-p ((wl-entry worklog-entry))
   "Predicate returning t if the time entries in worklog-entry are in
 daylight savings time (DST)"
@@ -356,11 +363,27 @@ daylight savings time (DST)"
     (ninth (multiple-value-list (decode-timestamp ts)))))
 
 (defmethod tz-offset ((wl-entry worklog-entry))
+  "The correct timezone offset to use depending on whether daylight
+savings time is in effect on a particular day.
+
+    A worklog entry does not contain an included time zone, so it is
+parsed by local-time as a UTC time zone, and then translated to a
+US/Pacific time with an included offset of either -7 hours (25200
+seconds) or -8 hours (28800 seconds), depending on whether daylight
+savings time was in effect.  This time must therefore be parsed with
+reference to an an offset of either -7 or -8 hours.  This procedure
+returns the correct offset for the begin and end datetimes of the
+worklog entry based upon the parsing function figuring out which
+offset is correct.  The local-time procedure 'decode-timestamp'
+returns a long list of values, the tenth value of which is the offset
+that is correct based upon the value of daylight savings time."
   (let* ((dt (entry-begin-datetime wl-entry))
 	 (ts (parse-timestring dt :end 10 :offset -28800)))
     (tenth (multiple-value-list (decode-timestamp ts)))))
 
 (defmethod ts-diff ((wl-entry worklog-time-entry))
+  "Given a worklog entry, calculate the elapsed time between the begin
+and end datetimes.  The value is stored as a 'local-time-duration' class."
   (local-time-duration:timestamp-difference (end-ts wl-entry) (begin-ts wl-entry)))
 
 ;;; End lolh-worklog-classes.lisp
