@@ -1,5 +1,5 @@
 ;;; lolh-worklog-package.lisp - Package definition for lolh-worklog
-;;; Time-stamp: <2023-01-24 13:26:29 minilolh3>
+;;; Time-stamp: <2023-01-31 00:09:26 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-16
@@ -12,25 +12,30 @@
 
 (defpackage :lolh.worklog
   (:use
-    :cl
-    :local-time
-    :lolh.utils)
+   :cl
+   :local-time
+   :lolh.utils)
   (:export
-    :parse-worklog-file
-    :parse-worklog-entry
-    :parse-worklog-entries
-    :parse-worklog-caseno-entries
-    :worklog-entry
-    :worklog-caseno-entry
-    :worklog-entry-lt
-    :worklog-entry-gt
-    :worklog-entry-eq
-    :work-d
-    :worklog-d
-    :*worklog-f*
-    :*worklog-entries*
-    :simple-print
-    :test-lolh-worklog
-    :test-lolh-worklog-bst))
+   :parse-worklog-file
+   :parse-worklog-entry
+   :parse-worklog-entries
+   :parse-worklog-caseno-entries
+   :worklog-entry
+   :worklog-caseno-entry
+   :worklog-entry-lt
+   :worklog-entry-gt
+   :worklog-entry-eq
+   :worklog-entry-lt-top
+   :worklog-entry-gt-top
+   :worklog-entry-eq-top
+   :*work-d*
+   :*worklog-d*
+   :*worklog-f*
+   :*worklog-entries*
+   :simple-print
+   :test-lolh-worklog
+   :test-lolh-worklog-bst
+   :worklog-entry-set-cmp-funcs
+   :worklog-entry-set-top-cmp-funcs))
 
 ;;; End lolh-worklog-package.lisp

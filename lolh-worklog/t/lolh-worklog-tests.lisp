@@ -1,5 +1,5 @@
 ;;; lolh-worklog-tests.lisp
-;;; Time-stamp: <2023-01-29 23:06:06 minilolh3>
+;;; Time-stamp: <2023-01-31 00:23:16 minilolh3>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-01-24
@@ -26,6 +26,11 @@
 (in-suite :paths-worklog-tests)
 
 (test files-exist
-  (is-true lolh.worklog::*work-d*))
+  (is-true *work-d*)
+  (is-true *worklog-d*)
+  (is-true *worklog-f*)
+  (is-true *worklog-entries*))
+
+
 
 ;;; End lolh-worklog-tests.lisp

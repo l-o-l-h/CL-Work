@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-01-24 13:26:35 minilolh3>
+;;; Time-stamp: <2023-01-31 00:04:27 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -21,6 +21,7 @@ each class.  The class also determines how the BST will be printed."
     (loop for entry = (parse-worklog-entry s (make-instance class))
 	  initially
 	     (setf *worklog-entries* (make-bst-node))
+	     (worklog-entry-set-cmp-funcs)
 	     (format t "File: ~A~&Class: ~A~2&" file class)
 	  finally
 	     (format t "~2&Entries: ~A~&" entries)
@@ -48,5 +49,13 @@ each class.  The class also determines how the BST will be printed."
     (format s "File created: => ~A~2&"
 	    (local-time:universal-to-timestamp (get-universal-time)))
     (simple-print-bst bst :to s)))
+
+(defun find-first (bst data)
+  "Return the BST rooted in the given data.
+Data should be an item held by the top slot of the class type held in the BST.
+This function calls a method based upon the type of data held in the BST.
+For example, assume the BST holds 'worklog-caseno-entry data items.
+Data should be a caseno, such as \"050305\"."
+  (worklog-entry-find-first bst (bst-node-data bst) data))
 
 ;;; End worklog-parse.lisp

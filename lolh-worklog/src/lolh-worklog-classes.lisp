@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-01-24 13:26:16 minilolh3>
+;;; Time-stamp: <2023-01-31 00:06:39 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -143,6 +143,10 @@
   (not (or (worklog-entry-lt entry1 entry2)
 	   (worklog-entry-gt entry1 entry2))))
 
+(defun worklog-entry-set-cmp-funcs ()
+  (cl-bst-set-cmp-funcs :lt #'worklog-entry-lt
+			:gt #'worklog-entry-gt
+			:eq #'worklog-entry-eq))
 
 
 
@@ -247,6 +251,17 @@ initial sort."))
 (defclass worklog-caseno-entry (worklog-entry) ()
   (:documentation "An entry specialized to work with caseno's."))
 
+(defmethod worklog-entry-top ((entry worklog-caseno-entry))
+  "Returns the top accessor for this class."
+  'entry-caseno)
+
+(defmethod worklog-entry-find-first (bst (class worklog-caseno-entry) data)
+  "Return the BST rooted in the first entry based upon the class type's top entry.
+For example, the top slot of a 'worklog-caseno-entry is 'entry-caseno."
+  (worklog-entry-set-top-cmp-funcs (make-instance (type-of class)))
+  (bst-find-node (make-instance (type-of class) :caseno data)
+		 bst))
+
 (defmethod worklog-entry-lt ((entry1 worklog-caseno-entry)
 			     (entry2 worklog-caseno-entry))
   "Less-than method for a caseno worklog entry class."
@@ -280,17 +295,6 @@ initial sort."))
       ((string< desc1 desc2) t)
       ((string> desc1 desc2) nil)
       (t nil))))
-
-(defmethod worklog-entry-simple-print ((entry worklog-caseno-entry) &key (to t))
-  "A basic format function to print an entry simply."
-  (format to +simple-print-caseno-format+
-	  (entry-caseno entry)
-	  (entry-type entry)
-	  (entry-begin-datetime entry)
-	  (entry-end-datetime entry)
-	  (entry-subject entry)
-	  (entry-verb entry)
-	  (entry-description entry)))
 
 (defmethod worklog-entry-gt ((entry1 worklog-caseno-entry)
 			     (entry2 worklog-caseno-entry))
@@ -326,16 +330,50 @@ initial sort."))
       ((string< desc1 desc2) nil)
       (t nil))))
 
+
 (defmethod worklog-entry-eq ((entry1 worklog-caseno-entry)
 			     (entry2 worklog-caseno-entry))
   "Equal method for a caseno worklog entry class."
   (not (or (worklog-entry-lt entry1 entry2)
 	   (worklog-entry-gt entry1 entry2))))
 
-(cl-bst-set-cmp-funcs :lt #'worklog-entry-lt
-		      :gt #'worklog-entry-gt
-		      :eq #'worklog-entry-eq)
+(defmethod worklog-entry-lt-top ((entry1 worklog-caseno-entry)
+				(entry2 worklog-caseno-entry))
+  "Less-than method for the top entry: caseno."
+  (let ((d1 (entry-caseno entry1))
+	(d2 (entry-caseno entry2)))
+    (string< d1 d2)))
 
+(defmethod worklog-entry-gt-top ((entry1 worklog-caseno-entry)
+				(entry2 worklog-caseno-entry))
+  "Greater-than method for the top entry: caseno."
+  (let ((d1 (entry-caseno entry1))
+	(d2 (entry-caseno entry2)))
+    (string> d1 d2)))
+
+
+(defmethod worklog-entry-eq-top ((entry1 worklog-caseno-entry)
+				 (entry2 worklog-caseno-entry))
+  "Equal method for the top entry: caseno."
+  (let ((d1 (entry-caseno entry1))
+	(d2 (entry-caseno entry2)))
+    (string= d1 d2)))
+
+(defmethod worklog-entry-set-top-cmp-funcs ((entry worklog-caseno-entry))
+  (cl-bst-set-cmp-funcs :lt #'worklog-entry-lt-top
+			:gt #'worklog-entry-gt-top
+			:eq #'worklog-entry-eq-top))
+
+(defmethod worklog-entry-simple-print ((entry worklog-caseno-entry) &key (to t))
+  "A basic format function to print an entry simply."
+  (format to +simple-print-caseno-format+
+	  (entry-caseno entry)
+	  (entry-type entry)
+	  (entry-begin-datetime entry)
+	  (entry-end-datetime entry)
+	  (entry-subject entry)
+	  (entry-verb entry)
+	  (entry-description entry)))
 
 
 
