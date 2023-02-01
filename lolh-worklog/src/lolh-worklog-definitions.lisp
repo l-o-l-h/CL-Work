@@ -1,5 +1,5 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-01-24 13:26:24 minilolh3>
+;;; Time-stamp: <2023-01-31 01:55:45 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -43,7 +43,7 @@ by worklog files.")
 
 (defparameter *worklog-f*
   (merge-pathnames
-   (make-pathname :name "worklog.2007.otl") *worklog-d*))
+   (make-pathname :name "worklog.2021.otl") *worklog-d*))
 
 (defparameter *worklog-entries* nil)
 
