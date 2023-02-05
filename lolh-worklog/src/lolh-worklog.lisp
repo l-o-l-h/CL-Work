@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-02-05 11:02:32 minilolh3>
+;;; Time-stamp: <2023-02-05 12:50:48 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -87,7 +87,7 @@ For example, caseno = 210501."
 	(d (make-instance (type-of (bst-node-data bst)) :caseno data))
 	(balance 0))
     ;; Print the heading
-    (format t "~2& ~A ~A~%~A~%" data "Trust Account" +desc-separator+)
+    (format t "~2& ~45@A ~A~% ~11A~8A~A~% ~46A~28A~14A ~A~%~A~%" data "TRUST ACCOUNT" "DATE" "TIME" "SUBJECT --> VERB" "DESCRIPTION" "PAYEE" "AMOUNT" "BALANCE" +trust-separator+)
     ;; Basic in-order traversal procedure
     (labels ((trav (b1 d1)
 	       (when (null b1) (return-from trav))
@@ -101,16 +101,22 @@ For example, caseno = 210501."
 					" " (:hour 2) ":" (:min 2))))
 			(subject (entry-subject entry))
 			(verb (entry-verb entry))
-			(desc (entry-description entry)))
+			(desc (entry-description entry))
+			(sign (find-sign verb)))
 		   (multiple-value-bind (acct dsc payee amt)
 		       (parse-description-with-colons desc)
-		       (format t " ~A| ~A --> ~A~% ~40A|~21A|~A|~%~A~%"
+		     (let* ((amt-float (parse-float amt))
+			    (amtf (convert-to-currency amt :sign sign)))
+		       (setf balance (+ balance (if sign amt-float
+						    (- amt-float))))
+		       (format t " ~A * ~A --> ~A~% ~44A ~25A ~A ~A~%~A~%"
 			       bts
 			       subject
 			       verb
-			       dsc payee (convert-to-currency amt)
-			       +desc-separator+))))
+			       dsc payee amtf (convert-to-currency balance :sign (plusp balance))
+			       +trust-separator+)))))
 	       (trav (bst-node-right b1) d1)))
-      (trav b d))))
+      (trav b d)
+      (format t "~%~82@A --> ~A~2%" "ENDING BALANCE" (convert-to-currency balance :sign (plusp balance))))))
 
 ;;; End lolh-worklog.lisp

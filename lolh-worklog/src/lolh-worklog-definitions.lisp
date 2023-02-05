@@ -1,5 +1,5 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-02-05 11:01:50 minilolh3>
+;;; Time-stamp: <2023-02-05 12:17:41 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -19,6 +19,9 @@
 
 (defparameter +desc-separator+
   " ------------------------------------------------------------------------------")
+
+(defparameter +trust-separator+
+  (make-string 100 :initial-element #\-))
 
 (defparameter +simple-print-format+
   "~A--~A | ~A | ~A | ~A --- ~A~&~A~2&")
@@ -95,5 +98,11 @@ numbers surrounded by parens."
   (multiple-value-bind (a d)
       (truncate amt)
     (format nil +currency-format+ sign (abs a) (abs d) sign)))
+
+(defun find-sign (verb)
+  (cond
+    ((search "DEPOSIT" verb) t)
+    ((search "WITHDRAWAL" verb) nil)
+    (t (error "The verb ~S does not contain either ~S or ~S." verb "DEPOSIT" "WITHDRAWAL"))))
 
 ;;; End lolh-worklog-definitions.lisp
