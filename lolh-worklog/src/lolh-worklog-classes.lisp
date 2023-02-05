@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-02-04 17:19:47 minilolh3>
+;;; Time-stamp: <2023-02-05 01:21:55 wlh>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -256,7 +256,8 @@ initial sort."))
   'entry-caseno)
 
 (defmethod worklog-entry-find-first (bst (class worklog-caseno-entry) data)
-  "Return the BST rooted in the first entry based upon the class type's top entry.
+  "Return the BST rooted in the first entry based upon the class type's
+top entry.
 For example, the top slot of a 'worklog-caseno-entry is 'entry-caseno."
   (worklog-entry-set-top-cmp-funcs (make-instance (type-of class)))
   (bst-find-node (make-instance (type-of class) :caseno data)
@@ -378,7 +379,7 @@ For example, the top slot of a 'worklog-caseno-entry is 'entry-caseno."
 
 
 ;; CLASS=> WORKLOG-TIME-ENTRY
-(defclass worklog-time-entry (worklog-entry)
+(defclass worklog-time-entry (worklog-caseno-entry)
   ((begin-ts :accessor begin-ts
 	     :initarg :begin-ts)
    (end-ts   :accessor end-ts
@@ -391,11 +392,16 @@ elapsed-time is a local-time-duration class instance."))
 (defmethod parse-worklog-entry :after (s (wl-t-entry worklog-time-entry))
   "An after method to calculate the ts-diff value for a new instance of a
 worklog-time-entry instance upon being parsed."
-  ;; The final value from the parsing function is actually an empty worklog-entry object
-  ;; with all slots unbound and should be ignored.
+  ;; The final value from the parsing function is actually an empty
+  ;; worklog-entry object with all slots unbound and should be
+  ;; ignored.
   (when (slot-boundp wl-t-entry 'begin-datetime)
-    (setf (begin-ts wl-t-entry) (parse-timestring (entry-begin-datetime wl-t-entry) :offset (tz-offset wl-t-entry)))
-    (setf (end-ts wl-t-entry) (parse-timestring (entry-end-datetime wl-t-entry) :offset (tz-offset wl-t-entry)))
+    (setf (begin-ts wl-t-entry)
+	  (parse-timestring
+	   (entry-begin-datetime wl-t-entry) :offset (tz-offset wl-t-entry)))
+    (setf (end-ts wl-t-entry)
+	  (parse-timestring
+	   (entry-end-datetime wl-t-entry) :offset (tz-offset wl-t-entry)))
     (setf (elapsed-time wl-t-entry) (ts-diff wl-t-entry))))
 
 (defmethod dst-p ((wl-entry worklog-entry))

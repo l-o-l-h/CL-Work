@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-02-04 17:31:29 minilolh3>
+;;; Time-stamp: <2023-02-05 01:32:13 wlh>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -78,7 +78,7 @@ For example, caseno = 210501."
 	       (trav (bst-node-right b1) d1)))
       (trav b d))))
 
-(defun trust-account (bst data)
+(defun worklog-trust-account (bst data)
   "Traverse that portion of a BST that matches the data.
 'find-first' locates the first entry that matches data.
 Thereafter the procedure filters out any entries that don't match.

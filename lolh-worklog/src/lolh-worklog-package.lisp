@@ -1,5 +1,5 @@
 ;;; lolh-worklog-package.lisp - Package definition for lolh-worklog
-;;; Time-stamp: <2023-02-04 16:37:10 minilolh3>
+;;; Time-stamp: <2023-02-05 01:32:01 wlh>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-16
@@ -39,6 +39,7 @@
    :test-lolh-worklog
    :test-lolh-worklog-bst
    :worklog-entry-set-cmp-funcs
-   :worklog-entry-set-top-cmp-funcs))
+   :worklog-entry-set-top-cmp-funcs
+   :worklog-trust-account))
 
 ;;; End lolh-worklog-package.lisp
