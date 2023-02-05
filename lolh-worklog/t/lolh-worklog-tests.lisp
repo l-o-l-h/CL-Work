@@ -1,5 +1,5 @@
 ;;; lolh-worklog-tests.lisp
-;;; Time-stamp: <2023-02-05 01:24:29 wlh>
+;;; Time-stamp: <2023-02-05 02:02:25 wlh>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-01-24
@@ -40,6 +40,6 @@
   (finishes (parse-worklog-file :file *worklog-f*
 				:class 'worklog-time-entry))
   (finishes (simple-print-bst *worklog-entries*))
-  (finishes (trust-account *worklog-entries* "210501")))
+  (finishes (worklog-trust-account *worklog-entries* "210501")))
 
 ;;; End lolh-worklog-tests.lisp

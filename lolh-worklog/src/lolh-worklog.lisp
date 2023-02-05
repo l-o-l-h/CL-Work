@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-02-05 01:32:13 wlh>
+;;; Time-stamp: <2023-02-05 02:37:46 wlh>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -84,16 +84,30 @@ For example, caseno = 210501."
 Thereafter the procedure filters out any entries that don't match.
 For example, caseno = 210501."
   (let ((b (find-first bst data))
-	(d (make-instance (type-of (bst-node-data bst)) :caseno data)))
+	(d (make-instance (type-of (bst-node-data bst)) :caseno data))
+	(balance 0))
+    ;; Print the heading
+    (format t "~2& ~A ~A~%~A~%" data "Trust Account" +desc-separator+)
+    ;; Basic in-order traversal procedure
     (labels ((trav (b1 d1)
 	       (when (null b1) (return-from trav))
 	       (trav (bst-node-left b1) d1)
 	       (when (and
 		      (worklog-entry-eq-top (bst-node-data b1) d1)
 		      (string= (entry-type (bst-node-data b1)) "TRUST"))
-		 ;; (describe (bst-node-data b1))
-		 (funcall #'worklog-entry-simple-print (bst-node-data b1))
-		 (format t "~%"))
+		 (let* ((entry (bst-node-data b1))
+			(bts (format-timestring nil (begin-ts entry)
+			      :format '(:year "-" (:month 2) "-" (:day 2)
+					" " (:hour 2) ":" (:min 2))))
+			(subject (entry-subject entry))
+			(verb (entry-verb entry))
+			(desc (entry-description entry)))
+		   (format t " ~A | ~A --> ~A~% ~A~%~A~%"
+			   bts
+			   subject
+			   verb
+			   desc
+			   +desc-separator+)))
 	       (trav (bst-node-right b1) d1)))
       (trav b d))))
 
