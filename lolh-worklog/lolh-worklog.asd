@@ -1,5 +1,5 @@
 ;;; lolh-worklog.asd
-;;; Time-stamp: <2023-02-05 01:54:03 wlh>
+;;; Time-stamp: <2023-02-05 10:37:23 minilolh3>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -17,7 +17,7 @@
   :version "0.0.10"
   :author "LOLH-LINC <lincolnlaw@mac.com>"
   :license "CC0 1.0 Universal"
-  :depends-on ("lolh-utils" "local-time" "local-time-duration")
+  :depends-on ("lolh-utils" "local-time" "local-time-duration" "parse-float")
   :components ((:module "src"
 		:serial t
 		:components ((:file "lolh-worklog-package")

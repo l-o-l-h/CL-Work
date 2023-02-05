@@ -1,5 +1,5 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-02-04 16:56:38 minilolh3>
+;;; Time-stamp: <2023-02-05 11:01:50 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -74,5 +74,26 @@ by worklog files.")
 	   (setf full-desc (concatenate 'string full-desc line))
 	finally
 	   (return (string-trim '(#\SPACE #\TAB) full-desc))))
+
+(defun parse-description-with-colons (desc)
+  "Parses a description line with items separated by colons, such as
+$14.93 :: LOLH TRUST :: HEADNOTE CHARGE EXPENSE REIMB :: USB6831 TRUST ACCT
+and returns four multiple values."
+  (let ((values ())
+	(start 0))
+    (dotimes (x 3 (values-list (cons (subseq desc start) values)))
+      (let* ((pos (position #\: desc :start start))
+	     (x (string-left-trim "$"(subseq desc start (1- pos)))))
+	(setf values (cons x values))
+	(setf start (+ 3 pos))))))
+
+(defun convert-to-currency (amt &key (sign t))
+  "Given a number (which can be either a string or a real number,
+convert the number into a specified currency form, with negative
+numbers surrounded by parens."
+  (when (stringp amt) (setf amt (parse-float amt)))
+  (multiple-value-bind (a d)
+      (truncate amt)
+    (format nil +currency-format+ sign (abs a) (abs d) sign)))
 
 ;;; End lolh-worklog-definitions.lisp

@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-02-05 02:37:46 wlh>
+;;; Time-stamp: <2023-02-05 11:02:32 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -102,12 +102,14 @@ For example, caseno = 210501."
 			(subject (entry-subject entry))
 			(verb (entry-verb entry))
 			(desc (entry-description entry)))
-		   (format t " ~A | ~A --> ~A~% ~A~%~A~%"
-			   bts
-			   subject
-			   verb
-			   desc
-			   +desc-separator+)))
+		   (multiple-value-bind (acct dsc payee amt)
+		       (parse-description-with-colons desc)
+		       (format t " ~A| ~A --> ~A~% ~40A|~21A|~A|~%~A~%"
+			       bts
+			       subject
+			       verb
+			       dsc payee (convert-to-currency amt)
+			       +desc-separator+))))
 	       (trav (bst-node-right b1) d1)))
       (trav b d))))
 
