@@ -1,5 +1,5 @@
 ;;; lolh-worklog-tests.lisp
-;;; Time-stamp: <2023-01-31 00:23:16 minilolh3>
+;;; Time-stamp: <2023-02-04 16:40:03 minilolh3>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-01-24
@@ -28,9 +28,17 @@
 (test files-exist
   (is-true *work-d*)
   (is-true *worklog-d*)
-  (is-true *worklog-f*)
-  (is-true *worklog-entries*))
+  (is-true *worklog-f*))
 
+(def-suite :trust-accounting-tests
+  :description "Tests for trust accounting procedures."
+  :in :root-worklog-tests)
 
+(in-suite :trust-accounting-tests)
+
+(test trust-accounting-simple-print
+  (finishes (parse-worklog-file :file *worklog-f*
+				:class 'worklog-time-entry))
+  (finishes (simple-print-bst *worklog-entries*)))
 
 ;;; End lolh-worklog-tests.lisp

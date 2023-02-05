@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-01-31 23:49:42 minilolh3>
+;;; Time-stamp: <2023-02-04 17:31:29 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -32,7 +32,9 @@ each class.  The class also determines how the BST will be printed."
 	     (format t "."))))
 
 (defun simple-print-bst (bst &key (to t))
-  "Print worklog entries held in a BST data structure simply."
+  "Print worklog entries held in a BST data structure simply.
+This uses a basic in-order traversal algorithm and calls the
+generic function worklog-entry-simple-print with the stream :to."
   (unless bst (setf bst (make-bst-node)))
   (unless (empty-bst-node bst)
     (simple-print-bst (bst-node-left bst) :to to)
@@ -40,7 +42,8 @@ each class.  The class also determines how the BST will be printed."
     (simple-print-bst (bst-node-right bst) :to to)))
 
 (defun simple-print-bst-to-file (bst)
-  "Print worklog entries held in a Bst data structure to a file simply."
+  "Print worklog entries held in a Bst data structure to a file simply.
+This sets up the file, obtains a stream, then calls simple-print-bst."
   (with-open-file (s (concatenate 'string (enough-namestring *worklog-f*)
 				  ".out.txt")
 		     :direction :output

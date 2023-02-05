@@ -1,5 +1,5 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-01-31 01:55:45 minilolh3>
+;;; Time-stamp: <2023-02-04 16:56:38 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -28,6 +28,23 @@
 
 (defparameter +simple-print-caseno-format+
   "~A | ~A~&~A--~A~&~A --- ~A~2&~A~&----------~2&")
+
+(defparameter +simple-print-worklog-time-format+
+  "~A | ~A | ~A --> ~A |~%~A --- ~A~%~A --- ~A (~A)~%~A~2%"
+  "caseno | type | subject --> verb
+   dt begin-end --- ts begin-end (dur)
+   description")
+
+(defparameter +simple-print-timestamp-format+
+  "~&~A | ~30A | "
+  "date | desc ")
+
+(defparameter +currency-format+
+  "$~:[(~; ~]~8,'*:D~,0$~:[)~; ~]"
+  "Prints a number in currency format.
+The comma groups by threes.
+Negative numbers are identified by being enclosed in parentheses.
+Asterisks pad the length to 8.")
 
 (defparameter +local-time-format+
   "'(:year \"-\" (:month 2) \"-\" (:day 2) \"T\" (:hour 2) \":\" (:min 2) \":\" (:sec 2))"

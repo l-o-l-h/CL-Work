@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-01-31 00:06:39 minilolh3>
+;;; Time-stamp: <2023-02-04 17:19:47 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -384,18 +384,24 @@ For example, the top slot of a 'worklog-caseno-entry is 'entry-caseno."
    (end-ts   :accessor end-ts
 	     :initarg :end-ts)
    (elapsed-time :accessor elapsed-time))
-  (:documentation "A worklog-entry class that handles elapsed time."))
+  (:documentation "A worklog-entry class that handles elapsed time.
+begin-ts and end-ts are time-stamp instances rather than strings.
+elapsed-time is a local-time-duration class instance."))
 
-(defmethod initialize-instance :after ((wl-t-entry worklog-time-entry) &key)
-  "A method to calculate the ts-diff value for a new instance of a
-worklog-time-entry instance upon initialization."
-  (setf (begin-ts wl-t-entry) (parse-timestring (entry-begin-datetime wl-t-entry) :offset (tz-offset wl-t-entry)))
-  (setf (end-ts wl-t-entry) (parse-timestring (entry-end-datetime wl-t-entry) :offset (tz-offset wl-t-entry)))
-  (setf (elapsed-time wl-t-entry) (ts-diff wl-t-entry)))
+(defmethod parse-worklog-entry :after (s (wl-t-entry worklog-time-entry))
+  "An after method to calculate the ts-diff value for a new instance of a
+worklog-time-entry instance upon being parsed."
+  ;; The final value from the parsing function is actually an empty worklog-entry object
+  ;; with all slots unbound and should be ignored.
+  (when (slot-boundp wl-t-entry 'begin-datetime)
+    (setf (begin-ts wl-t-entry) (parse-timestring (entry-begin-datetime wl-t-entry) :offset (tz-offset wl-t-entry)))
+    (setf (end-ts wl-t-entry) (parse-timestring (entry-end-datetime wl-t-entry) :offset (tz-offset wl-t-entry)))
+    (setf (elapsed-time wl-t-entry) (ts-diff wl-t-entry))))
 
 (defmethod dst-p ((wl-entry worklog-entry))
   "Predicate returning t if the time entries in worklog-entry are in
-daylight savings time (DST)"
+daylight savings time (DST).
+NOTE: this is not used yes, but it might be handy in the future."
   (let* ((dt (entry-begin-datetime wl-entry))
 	 (ts (parse-timestring dt :end 10 :offset -28800)))
     (ninth (multiple-value-list (decode-timestamp ts)))))
@@ -423,5 +429,18 @@ that is correct based upon the value of daylight savings time."
   "Given a worklog entry, calculate the elapsed time between the begin
 and end datetimes.  The value is stored as a 'local-time-duration' class."
   (local-time-duration:timestamp-difference (end-ts wl-entry) (begin-ts wl-entry)))
+
+(defmethod worklog-entry-simple-print ((entry worklog-time-entry) &key (to t))
+  (format to +simple-print-worklog-time-format+
+	  (entry-caseno entry)
+	  (entry-type entry)
+	  (entry-subject entry)
+	  (entry-verb entry)
+	  (entry-begin-datetime entry)
+	  (entry-end-datetime entry)
+	  (begin-ts entry)
+	  (end-ts entry)
+	  (ltd:human-readable-duration (elapsed-time entry))
+	  (entry-description entry)))
 
 ;;; End lolh-worklog-classes.lisp
