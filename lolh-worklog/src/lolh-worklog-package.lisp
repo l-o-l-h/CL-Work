@@ -1,9 +1,9 @@
 ;;; lolh-worklog-package.lisp - Package definition for lolh-worklog
-;;; Time-stamp: <2023-02-05 10:38:23 minilolh3>
+;;; Time-stamp: <2023-02-05 23:03:23 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-16
-;;; Version 0.0.10
+;;; Version 0.0.11
 
 ;;; Commentary:
 ;; lolh.worklog package definition.

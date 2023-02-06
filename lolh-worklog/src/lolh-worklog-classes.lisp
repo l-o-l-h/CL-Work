@@ -1,9 +1,9 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-02-05 01:21:55 wlh>
+;;; Time-stamp: <2023-02-05 23:03:09 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
-;;; Version 0.0.10
+;;; Version 0.0.11
 
 ;;; Commentary:
 ;; File to hold all of the class definitions and methods used by lolh.worklog

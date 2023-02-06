@@ -1,9 +1,9 @@
 ;;; lolh-worklog-tests.lisp
-;;; Time-stamp: <2023-02-05 22:04:34 minilolh3>
+;;; Time-stamp: <2023-02-05 23:03:40 minilolh3>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-01-24
-;;; Version: 0.0.10
+;;; Version: 0.0.11
 
 ;;; Commentary:
 

@@ -1,9 +1,9 @@
 ;;; lolh-worklog.asd
-;;; Time-stamp: <2023-02-05 10:37:23 minilolh3>
+;;; Time-stamp: <2023-02-05 23:03:00 minilolh3>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
-;;; Version: 0.0.10
+;;; Version: 0.0.11
 
 ;;; Commentary:
 ;; Creates the system "lolh-worklog", which is tested by the system

@@ -1,9 +1,9 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-02-05 22:58:45 minilolh3>
+;;; Time-stamp: <2023-02-05 23:03:16 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
-;;; Version 0.0.10
+;;; Version 0.0.11
 
 ;;; Commentary:
 ;; File to hold all of the non-class definitions and methods
