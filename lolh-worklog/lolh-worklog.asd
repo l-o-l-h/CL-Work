@@ -1,5 +1,5 @@
 ;;; lolh-worklog.asd
-;;; Time-stamp: <2023-02-05 23:03:00 minilolh3>
+;;; Time-stamp: <2023-02-05 23:07:57 minilolh3>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -14,7 +14,7 @@
 
 (defsystem "lolh-worklog"
   :description "Procedures operating upon worklogs."
-  :version "0.0.10"
+  :version "0.0.11"
   :author "LOLH-LINC <lincolnlaw@mac.com>"
   :license "CC0 1.0 Universal"
   :depends-on ("lolh-utils" "local-time" "local-time-duration" "parse-float")
@@ -28,7 +28,7 @@
 
 (defsystem "lolh-worklog/t"
   :description "Tests for the lolh-worklog system."
-  :version "0.0.10"
+  :version "0.0.11"
   :author "LOLH-LINC <lincolnlaw@mac.com"
   :license "CCO 1.0 Universal"
   :depends-on ("fiveam" "lolh-worklog")
