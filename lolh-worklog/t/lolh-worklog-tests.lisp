@@ -1,5 +1,5 @@
 ;;; lolh-worklog-tests.lisp
-;;; Time-stamp: <2023-02-05 10:57:48 minilolh3>
+;;; Time-stamp: <2023-02-05 22:04:34 minilolh3>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-01-24
@@ -37,8 +37,9 @@
 (in-suite :trust-accounting-tests)
 
 (test trust-accounting-simple-print
-  (finishes (parse-worklog-file :file *worklog-f*
-				:class 'worklog-time-entry))
+  (finishes (setf *worklog-entries*
+		  (parse-worklog-file :file *worklog-f*
+				      :class 'worklog-time-entry)))
   (finishes (simple-print-bst *worklog-entries*))
   (finishes (worklog-trust-account *worklog-entries* "210401")))
 

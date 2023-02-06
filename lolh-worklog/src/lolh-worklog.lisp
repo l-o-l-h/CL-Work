@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-02-05 12:50:48 minilolh3>
+;;; Time-stamp: <2023-02-05 22:44:12 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -18,18 +18,19 @@
 Parsed entries are placed into a BST sorted by methods set up for
 each class.  The class also determines how the BST will be printed."
   (with-open-file (s file :if-does-not-exist :error)
-    (loop for entry = (parse-worklog-entry s (make-instance class))
-	  initially
-	     (setf *worklog-entries* (make-bst-node))
-	     (worklog-entry-set-cmp-funcs)
-	     (format t "File: ~A~&Class: ~A~2&" file class)
-	  finally
-	     (format t "~2&Entries: ~A~&" entries)
-	  while entry
-	  count entry into entries
-	  do
-	     (bst-insert!-node entry *worklog-entries*)
-	     (format t "."))))
+    (let ((worklog-entries (make-bst-node)))
+     (loop for entry = (parse-worklog-entry s (make-instance class))
+	     initially
+		(worklog-entry-set-cmp-funcs)
+		(format t "File: ~A~&Class: ~A~2&" file class)
+	   finally
+	      (format t "~2&Entries: ~A~&" entries)
+	      (return worklog-entries)
+	   while entry
+	   count entry into entries
+	   do
+	      (bst-insert!-node entry worklog-entries)
+	      (format t ".")))))
 
 (defun simple-print-bst (bst &key (to t))
   "Print worklog entries held in a BST data structure simply.
@@ -87,7 +88,11 @@ For example, caseno = 210501."
 	(d (make-instance (type-of (bst-node-data bst)) :caseno data))
 	(balance 0))
     ;; Print the heading
-    (format t "~2& ~45@A ~A~% ~11A~8A~A~% ~46A~28A~14A ~A~%~A~%" data "TRUST ACCOUNT" "DATE" "TIME" "SUBJECT --> VERB" "DESCRIPTION" "PAYEE" "AMOUNT" "BALANCE" +trust-separator+)
+    (format t +trust-account-heading-format+
+	    data "TRUST ACCOUNT"
+	    "DATE" "TIME" "SUBJECT --> VERB"
+	    "DESCRIPTION" "PAYEE" "AMOUNT" "BALANCE"
+	    +trust-separator+)
     ;; Basic in-order traversal procedure
     (labels ((trav (b1 d1)
 	       (when (null b1) (return-from trav))
@@ -97,26 +102,26 @@ For example, caseno = 210501."
 		      (string= (entry-type (bst-node-data b1)) "TRUST"))
 		 (let* ((entry (bst-node-data b1))
 			(bts (format-timestring nil (begin-ts entry)
-			      :format '(:year "-" (:month 2) "-" (:day 2)
-					" " (:hour 2) ":" (:min 2))))
+						:format
+						'(:year "-" (:month 2) "-" (:day 2) " " (:hour 2) ":" (:min 2))))
 			(subject (entry-subject entry))
 			(verb (entry-verb entry))
 			(desc (entry-description entry))
-			(sign (find-sign verb)))
-		   (multiple-value-bind (acct dsc payee amt)
+			(sign (find-sign verb))) 		; + := t | - := nil
+		   (multiple-value-bind (acct dsc payee amt) 	; amt := string
 		       (parse-description-with-colons desc)
-		     (let* ((amt-float (parse-float amt))
-			    (amtf (convert-to-currency amt :sign sign)))
-		       (setf balance (+ balance (if sign amt-float
-						    (- amt-float))))
-		       (format t " ~A * ~A --> ~A~% ~44A ~25A ~A ~A~%~A~%"
+		     (let* ((amt-float (parse-float amt))	; string -> float
+			    (amtf (convert-to-currency amt :sign sign))) ; $ ****###.## | $(****.###.##)
+		       (setf balance (+ balance (if sign amt-float (- amt-float))))
+		       (format t +trust-account-format+
 			       bts
-			       subject
-			       verb
-			       dsc payee amtf (convert-to-currency balance :sign (plusp balance))
+			       subject verb
+			       amtf (convert-to-currency balance :sign (plusp balance))
+			       dsc
+			       payee
 			       +trust-separator+)))))
 	       (trav (bst-node-right b1) d1)))
       (trav b d)
-      (format t "~%~82@A --> ~A~2%" "ENDING BALANCE" (convert-to-currency balance :sign (plusp balance))))))
+      (format t +trust-ending-balance+ "ENDING BALANCE" (convert-to-currency balance :sign (plusp balance))))))
 
 ;;; End lolh-worklog.lisp

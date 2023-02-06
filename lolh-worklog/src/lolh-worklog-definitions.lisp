@@ -1,5 +1,5 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-02-05 12:17:41 minilolh3>
+;;; Time-stamp: <2023-02-05 22:58:45 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -37,6 +37,21 @@
   "caseno | type | subject --> verb
    dt begin-end --- ts begin-end (dur)
    description")
+
+(defparameter +trust-account-heading-format+
+  "~2& ~45@A ~A~% ~10A ~A  * ~32@A~% ~47A~28A~14A ~A~%~A~%"
+"           title
+            date time subj->verb
+            description payee amount balance")
+
+(defparameter +trust-account-format+
+  " ~A * ~23@A --> ~23A ~A ~A~% ~46A ~10@A~%~A~%"
+  " date time * subject-verb
+    description payee amount balance")
+
+(defparameter +trust-ending-balance+
+  "~%~82@A --> ~A~2%"
+  "ENDING BALANCE --> balance")
 
 (defparameter +simple-print-timestamp-format+
   "~&~A | ~30A | "
