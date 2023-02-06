@@ -1,5 +1,5 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-02-05 23:03:16 minilolh3>
+;;; Time-stamp: <2023-02-06 01:00:07 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -119,5 +119,9 @@ numbers surrounded by parens."
     ((search "DEPOSIT" verb) t)
     ((search "WITHDRAWAL" verb) nil)
     (t (error "The verb ~S does not contain either ~S or ~S." verb "DEPOSIT" "WITHDRAWAL"))))
+
+(defun get-worklog-files (&key (dir (uiop:getenv "WORKLOG")))
+  "Returns a list of files ending in .otl."
+  (uiop:directory* (uiop:strcat dir "/*.otl")))
 
 ;;; End lolh-worklog-definitions.lisp

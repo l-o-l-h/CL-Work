@@ -1,5 +1,5 @@
 ;;; lolh-worklog.asd
-;;; Time-stamp: <2023-02-05 23:07:57 minilolh3>
+;;; Time-stamp: <2023-02-06 01:19:52 minilolh3>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -31,7 +31,7 @@
   :version "0.0.11"
   :author "LOLH-LINC <lincolnlaw@mac.com"
   :license "CCO 1.0 Universal"
-  :depends-on ("fiveam" "lolh-worklog")
+  :depends-on ("fiveam" "lolh-worklog" "lolh-utils")
   :components ((:module "t"
 			:components ((:file "lolh-worklog-tests"))))
   :perform (test-op (o c) (symbol-call :fiveam '#:run! :root-worklog-tests)))

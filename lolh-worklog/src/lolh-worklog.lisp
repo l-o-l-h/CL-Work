@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-02-05 23:03:30 minilolh3>
+;;; Time-stamp: <2023-02-06 01:15:08 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -13,24 +13,32 @@
 
 (in-package :lolh.worklog)
 
-(defun parse-worklog-file (&key file (class 'worklog-entry))
+(defun parse-worklog-files (&key (list :worklog) (class 'worklog-entry))
+  (when (eql list :worklog)
+    (setf list (get-worklog-files)))
+  (let ((all-worklog-entries (make-bst-node)))
+   (dolist (file list all-worklog-entries)
+     (parse-worklog-file :bst all-worklog-entries
+			 :file file
+			 :class class))))
+
+(defun parse-worklog-file (&key bst file (class 'worklog-entry))
   "Parser for a worklog file 'file' using class 'class' for sorting.
 Parsed entries are placed into a BST sorted by methods set up for
 each class.  The class also determines how the BST will be printed."
   (with-open-file (s file :if-does-not-exist :error)
-    (let ((worklog-entries (make-bst-node)))
-     (loop for entry = (parse-worklog-entry s (make-instance class))
-	     initially
-		(worklog-entry-set-cmp-funcs)
-		(format t "File: ~A~&Class: ~A~2&" file class)
-	   finally
-	      (format t "~2&Entries: ~A~&" entries)
-	      (return worklog-entries)
-	   while entry
-	   count entry into entries
-	   do
-	      (bst-insert!-node entry worklog-entries)
-	      (format t ".")))))
+    (loop for entry = (parse-worklog-entry s (make-instance class))
+	    initially
+	       (worklog-entry-set-cmp-funcs)
+	       (format t "File: ~A~&Class: ~A~2&" file class)
+	  finally
+	     (format t "~2&Entries: ~A~&" entries)
+	     (return bst)
+	  while entry
+	  count entry into entries
+	  do
+	     (bst-insert!-node entry bst)
+	     (format t "."))))
 
 (defun simple-print-bst (bst &key (to t))
   "Print worklog entries held in a BST data structure simply.
