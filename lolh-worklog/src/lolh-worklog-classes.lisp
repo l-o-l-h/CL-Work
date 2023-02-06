@@ -1,5 +1,5 @@
 ;;; lolh-worklog-classes.lisp - LOLH Worklog Classes
-;;; Time-stamp: <2023-02-05 23:03:09 minilolh3>
+;;; Time-stamp: <2023-02-06 09:18:07 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -302,6 +302,8 @@ For example, the top slot of a 'worklog-caseno-entry is 'entry-caseno."
   "Greater-than method for a caseno worklog entry class."
   (let ((caseno1 (entry-caseno entry1))
 	(caseno2 (entry-caseno entry2))
+	(type1 (entry-type entry1))
+	(type2 (entry-type entry2))
 	(begin-dt1 (entry-begin-datetime entry1))
 	(begin-dt2 (entry-begin-datetime entry2))
 	(end-dt1 (entry-end-datetime entry1))
@@ -310,13 +312,13 @@ For example, the top slot of a 'worklog-caseno-entry is 'entry-caseno."
 	(subject2 (entry-subject entry2))
 	(verb1 (entry-verb entry1))
 	(verb2 (entry-verb entry2))
-	(type1 (entry-type entry1))
-	(type2 (entry-type entry2))
 	(desc1 (entry-description entry1))
 	(desc2 (entry-description entry2)))
     (cond
       ((string> caseno1 caseno2) t)
       ((string< caseno1 caseno2) nil)
+      ((string> type1 type2) t)
+      ((string< type1 type2) nil)
       ((string> begin-dt1 begin-dt2) t)
       ((string< begin-dt1 begin-dt2) nil)
       ((string> end-dt1 end-dt2) t)
@@ -325,8 +327,6 @@ For example, the top slot of a 'worklog-caseno-entry is 'entry-caseno."
       ((string< subject1 subject2) nil)
       ((string> verb1 verb2) t)
       ((string< verb1 verb2) nil)
-      ((string> type1 type2) t)
-      ((string< type1 type2) nil)
       ((string> desc1 desc2) t)
       ((string< desc1 desc2) nil)
       (t nil))))

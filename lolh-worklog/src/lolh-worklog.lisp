@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-02-06 01:15:08 minilolh3>
+;;; Time-stamp: <2023-02-06 09:04:29 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -13,14 +13,15 @@
 
 (in-package :lolh.worklog)
 
-(defun parse-worklog-files (&key (list :worklog) (class 'worklog-entry))
+(defun parse-worklog-files (&key (list :worklog) (class 'worklog-caseno-entry))
   (when (eql list :worklog)
     (setf list (get-worklog-files)))
   (let ((all-worklog-entries (make-bst-node)))
    (dolist (file list all-worklog-entries)
-     (parse-worklog-file :bst all-worklog-entries
-			 :file file
-			 :class class))))
+     (setf all-worklog-entries
+	   (parse-worklog-file :bst all-worklog-entries
+			       :file file
+			       :class class)))))
 
 (defun parse-worklog-file (&key bst file (class 'worklog-entry))
   "Parser for a worklog file 'file' using class 'class' for sorting.
