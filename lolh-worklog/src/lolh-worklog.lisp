@@ -1,5 +1,5 @@
 ;;; lolh-worklog.lisp - Code acting on worklogs
-;;; Time-stamp: <2023-02-06 09:04:29 minilolh3>
+;;; Time-stamp: <2023-02-07 13:46:54 minilolh3>
 
 ;;; Author: LOLH
 ;;; Created: 2023-01-09
@@ -106,31 +106,16 @@ For example, caseno = 210501."
     (labels ((trav (b1 d1)
 	       (when (null b1) (return-from trav))
 	       (trav (bst-node-left b1) d1)
+	       ;; Tests for correct caseno and TRUST type
 	       (when (and
 		      (worklog-entry-eq-top (bst-node-data b1) d1)
 		      (string= (entry-type (bst-node-data b1)) "TRUST"))
-		 (let* ((entry (bst-node-data b1))
-			(bts (format-timestring nil (begin-ts entry)
-						:format
-						'(:year "-" (:month 2) "-" (:day 2) " " (:hour 2) ":" (:min 2))))
-			(subject (entry-subject entry))
-			(verb (entry-verb entry))
-			(desc (entry-description entry))
-			(sign (find-sign verb))) 		; + := t | - := nil
-		   (multiple-value-bind (acct dsc payee amt) 	; amt := string
-		       (parse-description-with-colons desc)
-		     (let* ((amt-float (parse-float amt))	; string -> float
-			    (amtf (convert-to-currency amt :sign sign))) ; $ ****###.## | $(****.###.##)
-		       (setf balance (+ balance (if sign amt-float (- amt-float))))
-		       (format t +trust-account-format+
-			       bts
-			       subject verb
-			       amtf (convert-to-currency balance :sign (plusp balance))
-			       dsc
-			       payee
-			       +trust-separator+)))))
+		 (let ((entry (bst-node-data b1)))
+		   ;; print the entry and update the trust balance
+		   (setf balance (print-trust-table-entry entry balance))))
 	       (trav (bst-node-right b1) d1)))
       (trav b d)
       (format t +trust-ending-balance+ "ENDING BALANCE" (convert-to-currency balance :sign (plusp balance))))))
+
 
 ;;; End lolh-worklog.lisp

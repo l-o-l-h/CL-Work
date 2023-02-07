@@ -1,5 +1,5 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-02-06 01:00:07 minilolh3>
+;;; Time-stamp: <2023-02-07 13:43:53 minilolh3>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -65,7 +65,7 @@ Negative numbers are identified by being enclosed in parentheses.
 Asterisks pad the length to 8.")
 
 (defparameter +local-time-format+
-  "'(:year \"-\" (:month 2) \"-\" (:day 2) \"T\" (:hour 2) \":\" (:min 2) \":\" (:sec 2))"
+  '(:year "-" (:month 2) "-" (:day 2) "@" (:hour 2) ":" (:min 2))
   "This format parses a local-time timestamp object into the datetime format used
 by worklog files.")
 
@@ -123,5 +123,26 @@ numbers surrounded by parens."
 (defun get-worklog-files (&key (dir (uiop:getenv "WORKLOG")))
   "Returns a list of files ending in .otl."
   (uiop:directory* (uiop:strcat dir "/*.otl")))
+
+(defun print-trust-table-entry (entry balance)
+  (let* ((subject (entry-subject entry))
+	 (verb (entry-verb entry))
+	 (desc (entry-description entry))
+	 (sign (find-sign verb)) 		; + := t | - := nil
+	 (bts (format-timestring nil (begin-ts entry)
+						:format +local-time-format+)))
+    (multiple-value-bind (acct dsc payee amt) 	; amt := string
+	(parse-description-with-colons desc)
+      (let* ((amt-float (parse-float amt))	; string -> float
+	     (amtf (convert-to-currency amt :sign sign))) ; $ ****###.## | $(****.###.##)
+	(setf balance (+ balance (if sign amt-float (- amt-float))))
+	(format t +trust-account-format+
+		bts
+		subject verb
+		amtf (convert-to-currency balance :sign (plusp balance))
+		dsc
+		payee
+		+trust-separator+))))
+  balance)
 
 ;;; End lolh-worklog-definitions.lisp
