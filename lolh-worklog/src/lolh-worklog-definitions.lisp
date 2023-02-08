@@ -1,5 +1,5 @@
 ;;; lolh-worklog-definitions.lisp - LOLH Worklog Definitions
-;;; Time-stamp: <2023-02-07 13:43:53 minilolh3>
+;;; Time-stamp: <2023-02-08 01:46:06 wlh>
 
 ;;; Author: LOLH <lincolnlaw@mac.com>
 ;;; Created: 2023-01-16
@@ -118,7 +118,8 @@ numbers surrounded by parens."
   (cond
     ((search "DEPOSIT" verb) t)
     ((search "WITHDRAWAL" verb) nil)
-    (t (error "The verb ~S does not contain either ~S or ~S." verb "DEPOSIT" "WITHDRAWAL"))))
+    (t (error "The verb ~S does not contain either ~S or ~S."
+	      verb "DEPOSIT" "WITHDRAWAL"))))
 
 (defun get-worklog-files (&key (dir (uiop:getenv "WORKLOG")))
   "Returns a list of files ending in .otl."
@@ -133,8 +134,10 @@ numbers surrounded by parens."
 						:format +local-time-format+)))
     (multiple-value-bind (acct dsc payee amt) 	; amt := string
 	(parse-description-with-colons desc)
+      (declare (ignore acct))
       (let* ((amt-float (parse-float amt))	; string -> float
-	     (amtf (convert-to-currency amt :sign sign))) ; $ ****###.## | $(****.###.##)
+	     ;; $ ****###.## | $(****.###.##)
+	     (amtf (convert-to-currency amt :sign sign)))
 	(setf balance (+ balance (if sign amt-float (- amt-float))))
 	(format t +trust-account-format+
 		bts
