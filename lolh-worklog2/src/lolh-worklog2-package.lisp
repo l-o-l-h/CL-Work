@@ -1,5 +1,5 @@
 ;;; lolh-worklog2-package.lisp - Package definition for lolh.worklog2
-;;; Time-stamp: <2023-02-27 20:26:50 lolh-mbp-16>
+;;; Time-stamp: <2023-03-08 08:39:50 lolh-mbp-16>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-02-23
@@ -20,6 +20,8 @@
    :%entry-separator%
    :%subj-verb-separator%
    :%svs-len%
-   :%desc-separator%))
+   :%desc-separator%
+   :%WORK%
+   :%WORKLOG%))
 
 ;;; End lolh-worklog2-package.lisp

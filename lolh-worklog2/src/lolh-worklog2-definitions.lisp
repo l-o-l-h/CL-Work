@@ -1,5 +1,5 @@
 ;;; lolh-worklog2-definitions.lisp - LOLH Worklog2 Definitions
-;;; Time-stamp: <2023-02-27 20:23:05 lolh-mbp-16>
+;;; Time-stamp: <2023-03-08 09:05:26 lolh-mbp-16>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-02-24
@@ -29,5 +29,18 @@
 	       (make-string 78 :initial-element #\-))
   "The line of symbols that contains a complete worklog entry
 description.")
+
+(defconstant %WORK%
+  (uiop/pathname:parse-unix-namestring
+   (uiop/os:getenv "WORK")
+   :ensure-directory t)
+  "Every system may place the WORK directory in a different location,
+but there will always be a standard hierarch from there.")
+
+(defconstant %WORKLOG%
+  (uiop/pathname:merge-pathnames*
+   (make-pathname :directory '(:relative "worklog"))
+   %WORK%)
+  "The worklog/ directory is directly under the work/ directory.")
 
 ;;; End lolh-worklog2-definitions.lisp

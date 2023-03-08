@@ -1,5 +1,5 @@
 ;;; lolh-worklog2-tests.lisp
-;;; Time-stamp: <2023-02-25 23:22:44 lolh-mbp-16>
+;;; Time-stamp: <2023-03-08 08:48:47 lolh-mbp-16>
 
 ;;; Author: LOLH-LINC <lincolnlaw@mac.com>
 ;;; Created: 2023-02-25
@@ -29,6 +29,10 @@
 (in-suite :first-worklog2-tests)
 
 (test do-nothing
-      (is (eq t t)))
+  (is (eq t t)))
+
+(test check-pathnames
+  (is (uiop/pathname:directory-pathname-p %WORK%))
+  (is (uiop/pathname:directory-pathname-p %WORKLOG%)))
 
 ;;; End lolh-worklog2-tests.lisp
